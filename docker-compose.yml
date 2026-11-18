@@ -4,6 +4,8 @@ x-app: &app
   build: .
   image: issue-intake
   user: "${UID:-1000}:${GID:-1000}"
+  environment:
+    HOME: /tmp
   volumes:
     - .:/var/www/html
 
