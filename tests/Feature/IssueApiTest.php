@@ -103,6 +103,39 @@ class IssueApiTest extends TestCase
             ->assertJsonValidationErrors(['priority']);
     }
 
+    public function test_can_sort_issues_by_priority(): void
+    {
+        $low = Issue::factory()->create(['priority' => 'low']);
+        $high = Issue::factory()->create(['priority' => 'high']);
+        $medium = Issue::factory()->create(['priority' => 'medium']);
+
+        $this->getJson('/api/issues?sort=priority&direction=desc')
+            ->assertOk()
+            ->assertJsonPath('data.*.id', [$high->id, $medium->id, $low->id]);
+
+        $this->getJson('/api/issues?sort=priority&direction=asc')
+            ->assertJsonPath('data.*.id', [$low->id, $medium->id, $high->id]);
+    }
+
+    public function test_list_is_paginated(): void
+    {
+        Issue::factory()->count(5)->create();
+
+        $this->getJson('/api/issues?per_page=2&page=2')
+            ->assertOk()
+            ->assertJsonCount(2, 'data')
+            ->assertJsonPath('meta.current_page', 2)
+            ->assertJsonPath('meta.per_page', 2)
+            ->assertJsonPath('meta.total', 5);
+    }
+
+    public function test_list_rejects_invalid_sort_options(): void
+    {
+        $this->getJson('/api/issues?sort=title&direction=up&per_page=500')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['sort', 'direction', 'per_page']);
+    }
+
     public function test_can_update_issue(): void
     {
         $issue = Issue::factory()->create(['priority' => 'high']);

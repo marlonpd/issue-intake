@@ -16,9 +16,10 @@ class IssueController extends Controller
     {
         $issues = Issue::query()
             ->filter($request->validated())
+            ->sorted($request->input('sort', 'created_at'), $request->input('direction', 'desc'))
             ->withCount('comments')
-            ->latest('id')
-            ->paginate();
+            ->paginate($request->integer('per_page', 15))
+            ->withQueryString();
 
         return IssueResource::collection($issues);
     }

@@ -16,6 +16,9 @@ class ListIssuesRequest extends FormRequest
             'status' => ['nullable', Rule::enum(IssueStatus::class)],
             'priority' => ['nullable', Rule::enum(IssuePriority::class)],
             'category' => ['nullable', Rule::enum(IssueCategory::class)],
+            'sort' => ['nullable', Rule::in(['created_at', 'updated_at', 'priority'])],
+            'direction' => ['nullable', Rule::in(['asc', 'desc'])],
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
         ];
     }
 }

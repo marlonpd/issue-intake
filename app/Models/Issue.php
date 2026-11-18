@@ -84,6 +84,20 @@ class Issue extends Model
             && $this->created_at->lt(now()->subDays(config('issues.overdue_days')));
     }
 
+    public function scopeSorted(Builder $query, string $column, string $direction): void
+    {
+        $direction = $direction === 'asc' ? 'asc' : 'desc';
+
+        // Priority is stored as text, so sort it by its real order instead of alphabetically.
+        if ($column === 'priority') {
+            $query->orderByRaw("case priority when 'high' then 3 when 'medium' then 2 else 1 end {$direction}");
+        } else {
+            $query->orderBy($column, $direction);
+        }
+
+        $query->orderBy('id', $direction);
+    }
+
     public function scopeOverdue(Builder $query): void
     {
         $query->where('status', '!=', IssueStatus::Resolved)
