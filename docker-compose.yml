@@ -24,7 +24,7 @@ services:
 
   worker:
     <<: *app
-    command: php artisan queue:work --tries=3
+    command: php artisan queue:work
     restart: unless-stopped
     depends_on:
       app:
