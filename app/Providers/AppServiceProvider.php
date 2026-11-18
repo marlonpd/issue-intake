@@ -2,23 +2,22 @@
 
 namespace App\Providers;
 
+use App\Services\Summary\RuleBasedSummaryGenerator;
+use App\Services\Summary\SummaryGenerator;
 use Illuminate\Support\ServiceProvider;
+use InvalidArgumentException;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
-        //
-    }
+        $this->app->bind(SummaryGenerator::class, function ($app) {
+            $driver = config('summary.driver');
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        //
+            return match ($driver) {
+                'rules' => $app->make(RuleBasedSummaryGenerator::class),
+                default => throw new InvalidArgumentException("Unknown summary driver [{$driver}]."),
+            };
+        });
     }
 }
