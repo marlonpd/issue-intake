@@ -6,6 +6,7 @@ use App\Enums\IssueCategory;
 use App\Enums\IssuePriority;
 use App\Enums\IssueStatus;
 use App\Enums\SummaryStatus;
+use App\Jobs\GenerateIssueSummary;
 use Database\Factories\IssueFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,6 +19,9 @@ class Issue extends Model
 {
     /** @use HasFactory<IssueFactory> */
     use HasFactory;
+
+    // Changing any of these makes the current summary outdated. Status changes do not.
+    public const SUMMARY_FIELDS = ['title', 'description', 'priority', 'category'];
 
     protected $attributes = [
         'status' => 'open',
@@ -40,6 +44,22 @@ class Issue extends Model
     {
         static::saving(function (Issue $issue) {
             $issue->needs_attention = $issue->priority === IssuePriority::High;
+        });
+
+        static::updating(function (Issue $issue) {
+            if ($issue->isDirty(self::SUMMARY_FIELDS)) {
+                $issue->summary_status = SummaryStatus::Pending;
+            }
+        });
+
+        static::created(function (Issue $issue) {
+            GenerateIssueSummary::dispatch($issue);
+        });
+
+        static::updated(function (Issue $issue) {
+            if ($issue->wasChanged(self::SUMMARY_FIELDS)) {
+                GenerateIssueSummary::dispatch($issue);
+            }
         });
     }
 
