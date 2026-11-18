@@ -43,7 +43,7 @@ class Issue extends Model
     protected static function booted(): void
     {
         static::saving(function (Issue $issue) {
-            $issue->needs_attention = $issue->priority === IssuePriority::High;
+            $issue->needs_attention = $issue->shouldNeedAttention();
         });
 
         static::updating(function (Issue $issue) {
@@ -66,6 +66,28 @@ class Issue extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function shouldNeedAttention(): bool
+    {
+        if ($this->status === IssueStatus::Resolved) {
+            return false;
+        }
+
+        return $this->priority === IssuePriority::High || $this->isOverdue();
+    }
+
+    public function isOverdue(): bool
+    {
+        return $this->created_at !== null
+            && $this->status !== IssueStatus::Resolved
+            && $this->created_at->lt(now()->subDays(config('issues.overdue_days')));
+    }
+
+    public function scopeOverdue(Builder $query): void
+    {
+        $query->where('status', '!=', IssueStatus::Resolved)
+            ->where('created_at', '<', now()->subDays(config('issues.overdue_days')));
     }
 
     public function scopeFilter(Builder $query, array $filters): void
