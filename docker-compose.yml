@@ -1,0 +1,37 @@
+name: issue-intake
+
+x-app: &app
+  build: .
+  image: issue-intake
+  user: "${UID:-1000}:${GID:-1000}"
+  volumes:
+    - .:/var/www/html
+
+services:
+  app:
+    <<: *app
+    entrypoint: entrypoint
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:8000/up"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  worker:
+    <<: *app
+    command: php artisan queue:work --tries=3
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+
+  scheduler:
+    <<: *app
+    command: php artisan schedule:work
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
