@@ -1,0 +1,292 @@
+:root {
+    --text: #1f2328;
+    --muted: #656d76;
+    --border: #d0d7de;
+    --bg: #f6f8fa;
+    --card: #ffffff;
+    --primary: #2457c5;
+    --high: #c62828;
+    --medium: #b26a00;
+    --low: #4d6b53;
+    --attention-bg: #fff4f2;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--bg);
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 16px 48px;
+}
+
+h1 {
+    font-size: 24px;
+    margin: 16px 0;
+}
+
+h2 {
+    font-size: 16px;
+    margin: 0 0 12px;
+}
+
+a {
+    color: var(--primary);
+}
+
+.topbar {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+}
+
+.topbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.brand {
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+}
+
+.button {
+    display: inline-block;
+    padding: 7px 14px;
+    border: 1px solid var(--primary);
+    border-radius: 6px;
+    background: var(--primary);
+    color: #fff;
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button-secondary {
+    background: var(--card);
+    color: var(--primary);
+}
+
+.link {
+    font-size: 14px;
+}
+
+.flash {
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    border: 1px solid #a7d7b0;
+    border-radius: 6px;
+    background: #eef9f0;
+}
+
+.error-box {
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    border: 1px solid #f1b5b5;
+    border-radius: 6px;
+    background: #fdf0f0;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+select,
+input,
+textarea {
+    padding: 7px 9px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--card);
+    font: inherit;
+}
+
+.issues {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+.issues th,
+.issues td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+}
+
+.issues td:not(:first-child) {
+    white-space: nowrap;
+}
+
+.issues th {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.issues tr.attention td {
+    background: var(--attention-bg);
+}
+
+.tag {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid currentColor;
+}
+
+.tag-high {
+    color: var(--high);
+}
+
+.tag-medium {
+    color: var(--medium);
+}
+
+.tag-low {
+    color: var(--low);
+}
+
+.tag-attention {
+    color: #fff;
+    background: var(--high);
+    border-color: var(--high);
+    margin-left: 6px;
+}
+
+.empty,
+.muted {
+    color: var(--muted);
+}
+
+.pagination {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination li > * {
+    display: inline-block;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--card);
+}
+
+.pagination li.disabled {
+    color: var(--muted);
+}
+
+.issue-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.meta {
+    color: var(--muted);
+    margin-top: 0;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.summary {
+    border-left: 4px solid var(--primary);
+}
+
+.description {
+    white-space: pre-line;
+    margin: 0;
+}
+
+.comment {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.comment-meta {
+    margin: 0 0 4px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.form label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.form input,
+.form textarea {
+    font-weight: 400;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.form-row label {
+    flex: 1;
+    min-width: 160px;
+}
+
+.comment-form {
+    margin-top: 16px;
+}
+
+.error {
+    color: var(--high);
+    font-weight: 400;
+    font-size: 13px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+@media (max-width: 700px) {
+    .issues th:nth-child(3),
+    .issues td:nth-child(3),
+    .issues th:nth-child(5),
+    .issues td:nth-child(5),
+    .issues th:nth-child(6),
+    .issues td:nth-child(6) {
+        display: none;
+    }
+}
