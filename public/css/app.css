@@ -222,7 +222,8 @@ textarea {
 }
 
 .summary {
-    border-left: 4px solid var(--primary);
+    background: #f3f7ff;
+    border-color: #c9d8f5;
 }
 
 .description {
