@@ -3,7 +3,7 @@ name: issue-intake
 x-app: &app
   build: .
   image: issue-intake
-  user: "${UID:-1000}:${GID:-1000}"
+  user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
   environment:
     HOME: /tmp
   volumes:
